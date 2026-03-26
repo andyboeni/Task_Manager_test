@@ -1,31 +1,39 @@
 package org.imrofli.taskmanager.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "tasks", indexes = {
+    @Index(columnList = "title", name = "task_title_index")
+})
 public class Task {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @NotBlank
-    @Size(max = 100)
+
+    @NotBlank(message = "{validation.title.not_blank}")
+    @Size(max = 100, message = "{validation.title.max_length}")
+    @Column(nullable = false, updatable = true, columnDefinition = "VARCHAR(100)")
     private String title;
-    
-    @Size(max = 500)
+
+    @Size(max = 500, message = "{validation.description.max_length}")
+    @Column(columnDefinition = "TEXT")
     private String description;
-    
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, updatable = true)
     private TaskStatus status;
-    
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTitle() { return title; }
