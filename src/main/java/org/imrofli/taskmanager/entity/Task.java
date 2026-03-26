@@ -33,6 +33,18 @@ public class Task {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
+    // Default constructor
+    public Task() {}
+
+    // Constructor for testing
+    public Task(Long id, String title, String description, TaskStatus status, LocalDate dueDate) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.dueDate = dueDate;
+    }
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
