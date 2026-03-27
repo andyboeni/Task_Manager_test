@@ -7,6 +7,7 @@ import org.imrofli.taskmanager.exception.TaskNotFoundException;
 import org.imrofli.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskResponse>> getAllTasks() {
         List<Task> tasks = taskService.getAllTasks();
         return ResponseEntity.ok(tasks.stream()
@@ -42,7 +43,7 @@ public class TaskController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
         try {
             Optional<Task> task = taskService.getTaskById(id);
@@ -55,7 +56,7 @@ public class TaskController {
         }
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
         Task task = new Task();
         task.setTitle(request.title());
@@ -70,7 +71,7 @@ public class TaskController {
             .body(toTaskResponse(createdTask));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest request) {
         try {
             Task existingTask = taskService.getTaskById(id).orElseThrow();
@@ -88,7 +89,7 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         try {
             taskService.deleteTask(id);
