@@ -42,9 +42,7 @@ public class TaskServiceImpl implements TaskService {
         Task existingTask = taskRepository.findById(task.getId())
             .orElseThrow(() -> new TaskNotFoundException("Task not found"));
         
-        if (!task.getTitle().equals(existingTask.getTitle())) {
-            validateTaskBeforeUpdate(existingTask, task);
-        }
+        validateTaskBeforeUpdate(existingTask, task);
         
         return taskRepository.save(task);
     }

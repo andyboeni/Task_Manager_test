@@ -98,4 +98,30 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TaskResponse> patchTask(@PathVariable Long id, @Valid @RequestBody TaskPatchRequest request) {
+        try {
+            Task existingTask = taskService.getTaskById(id).orElseThrow();
+            
+            if (request.title() != null && !request.title().isEmpty()) {
+                existingTask.setTitle(request.title());
+            }
+            if (request.description() != null) {
+                existingTask.setDescription(request.description());
+            }
+            if (request.status() != null) {
+                existingTask.setStatus(request.status());
+            }
+            if (request.dueDate() != null) {
+                existingTask.setDueDate(request.dueDate());
+            }
+
+            Task updatedTask = taskService.updateTask(existingTask);
+            
+            return ResponseEntity.ok(toTaskResponse(updatedTask));
+        } catch (TaskNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
