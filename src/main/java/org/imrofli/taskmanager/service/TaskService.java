@@ -24,4 +24,8 @@ public interface TaskService {
 
     @Transactional
     void deleteTask(Long id);
+
+    void validateTaskBeforeCreate(Task task);
+
+    void validateTaskBeforeUpdate(Task existingTask, Task updatedTask);
 }

@@ -33,20 +33,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(Task task) {
+        validateTaskBeforeCreate(task);
         return taskRepository.save(task);
     }
 
     @Override
     public Task updateTask(Task task) {
-        return taskRepository.findById(task.getId())
-                .map(existingTask -> {
-                    existingTask.setTitle(task.getTitle());
-                    existingTask.setDescription(task.getDescription());
-                    existingTask.setStatus(task.getStatus());
-                    existingTask.setDueDate(task.getDueDate());
-                    return taskRepository.save(existingTask);
-                })
-                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        Task existingTask = taskRepository.findById(task.getId())
+            .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        
+        if (!task.getTitle().equals(existingTask.getTitle())) {
+            validateTaskBeforeUpdate(existingTask, task);
+        }
+        
+        return taskRepository.save(task);
     }
 
     @Override
@@ -55,5 +55,35 @@ public class TaskServiceImpl implements TaskService {
             throw new TaskNotFoundException("Task not found");
         }
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    public void validateTaskBeforeCreate(Task task) {
+        if (task.getTitle() == null || task.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Title must not be empty");
+        }
+        
+        if (task.getTitle().length() > 100) {
+            throw new IllegalArgumentException("Title exceeds maximum length of 100 characters");
+        }
+        
+        if (task.getDescription() != null && task.getDescription().length() > 500) {
+            throw new IllegalArgumentException("Description exceeds maximum length of 500 characters");
+        }
+    }
+
+    @Override
+    public void validateTaskBeforeUpdate(Task existingTask, Task updatedTask) {
+        if (updatedTask.getTitle() == null || updatedTask.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Title must not be empty");
+        }
+        
+        if (updatedTask.getTitle().length() > 100) {
+            throw new IllegalArgumentException("Title exceeds maximum length of 100 characters");
+        }
+        
+        if (updatedTask.getDescription() != null && updatedTask.getDescription().length() > 500) {
+            throw new IllegalArgumentException("Description exceeds maximum length of 500 characters");
+        }
     }
 }
