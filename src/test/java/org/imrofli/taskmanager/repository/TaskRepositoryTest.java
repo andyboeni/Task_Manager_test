@@ -25,8 +25,8 @@ class TaskRepositoryTest {
     private EntityManager entityManager;
 
     private List<Task> testTasks = List.of(
-            new Task(1L, "Test Task 1", "This is a test description", TaskStatus.TODO, null),
-            new Task(2L, "Test Task 2", null, TaskStatus.IN_PROGRESS, null)
+            new Task(1L, "Test Task 1", "This is a test description", TaskStatus.TODO, TaskPriority.MEDIUM, null),
+            new Task(2L, "Test Task 2", null, TaskStatus.IN_PROGRESS, TaskPriority.HIGH, null)
     );
 
     @Test

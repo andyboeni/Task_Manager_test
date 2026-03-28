@@ -30,6 +30,10 @@ public class Task {
     @Column(nullable = false, updatable = true)
     private TaskStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, updatable = true)
+    private TaskPriority priority = TaskPriority.MEDIUM;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
@@ -37,11 +41,12 @@ public class Task {
     public Task() {}
 
     // Constructor for testing
-    public Task(Long id, String title, String description, TaskStatus status, LocalDate dueDate) {
+    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, LocalDate dueDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
+        this.priority = priority;
         this.dueDate = dueDate;
     }
 
@@ -54,6 +59,8 @@ public class Task {
     public void setDescription(String description) { this.description = description; }
     public TaskStatus getStatus() { return status; }
     public void setStatus(TaskStatus status) { this.status = status; }
+    public TaskPriority getPriority() { return priority; }
+    public void setPriority(TaskPriority priority) { this.priority = priority; }
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
@@ -64,6 +71,7 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", priority=" + priority +
                 ", dueDate=" + dueDate +
                 '}';
     }

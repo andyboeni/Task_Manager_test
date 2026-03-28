@@ -30,8 +30,8 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        testTasks.add(new Task(1L, "Test Task 1", "This is a test description", TaskStatus.TODO, null));
-        testTasks.add(new Task(2L, "Test Task 2", null, TaskStatus.IN_PROGRESS, null));
+        testTasks.add(new Task(1L, "Test Task 1", "This is a test description", TaskStatus.TODO, TaskPriority.MEDIUM, null));
+        testTasks.add(new Task(2L, "Test Task 2", null, TaskStatus.IN_PROGRESS, TaskPriority.HIGH, null));
 
         when(taskRepository.findAll()).thenReturn(testTasks);
     }

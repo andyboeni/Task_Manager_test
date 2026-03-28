@@ -39,6 +39,7 @@ public class TaskController {
             task.getTitle(),
             task.getDescription(),
             task.getStatus(),
+            task.getPriority(),
             task.getDueDate()
         );
     }

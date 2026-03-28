@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { TaskFormData, TaskStatus } from '../types/task';
+import { TaskFormData, TaskStatus, TaskPriority } from '../types/task';
 
 interface UpdateTaskProps {
     task: Task;
@@ -16,6 +16,7 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
             title: task.title,
             description: task.description,
             status: task.status as TaskStatus,
+            priority: task.priority as TaskPriority,
         }
     });
 
@@ -74,6 +75,24 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
                 </select>
                 {errors.status && (
                     <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
+                )}
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium mb-1">Priority</label>
+                <select
+                    {...register('priority', {
+                        required: 'Priority is required'
+                    })}
+                    className="w-full p-2 border rounded-md"
+                >
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                    <option value="URGENT">Urgent</option>
+                </select>
+                {errors.priority && (
+                    <p className="text-red-500 text-sm mt-1">{errors.priority.message}</p>
                 )}
             </div>
 
