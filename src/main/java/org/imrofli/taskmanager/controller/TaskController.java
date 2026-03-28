@@ -72,7 +72,7 @@ public class TaskController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest request) {
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid(org.imrofli.taskmanager.dto.OnUpdate.class) @RequestBody TaskRequest request) {
         try {
             Task existingTask = taskService.getTaskById(id).orElseThrow();
             
@@ -100,7 +100,7 @@ public class TaskController {
     }
 
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> patchTask(@PathVariable Long id, @Valid @RequestBody TaskPatchRequest request) {
+    public ResponseEntity<TaskResponse> patchTask(@PathVariable Long id, @Valid(org.imrofli.taskmanager.dto.OnUpdate.class) @RequestBody TaskPatchRequest request) {
         try {
             Task existingTask = taskService.getTaskById(id).orElseThrow();
             

@@ -1,6 +1,12 @@
 package org.imrofli.taskmanager.service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.imrofli.taskmanager.dto.OnCreate;
+import org.imrofli.taskmanager.dto.OnUpdate;
 import org.imrofli.taskmanager.entity.Task;
 import org.imrofli.taskmanager.exception.TaskNotFoundException;
 import org.imrofli.taskmanager.repository.TaskRepository;
@@ -9,16 +15,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+    private final Validator validator;
 
     @Autowired
     public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        this.validator = factory.getValidator();
     }
 
     @Override
@@ -33,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(Task task) {
-        validateTaskBeforeCreate(task);
+        validateEntity(task, OnCreate.class);
         return taskRepository.save(task);
     }
 
@@ -42,7 +52,7 @@ public class TaskServiceImpl implements TaskService {
         Task existingTask = taskRepository.findById(task.getId())
             .orElseThrow(() -> new TaskNotFoundException("Task not found"));
         
-        validateTaskBeforeUpdate(existingTask, task);
+        validateEntity(task, OnUpdate.class);
         
         return taskRepository.save(task);
     }
@@ -57,31 +67,21 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void validateTaskBeforeCreate(Task task) {
-        if (task.getTitle() == null || task.getTitle().isEmpty()) {
-            throw new IllegalArgumentException("Title must not be empty");
-        }
-        
-        if (task.getTitle().length() > 100) {
-            throw new IllegalArgumentException("Title exceeds maximum length of 100 characters");
-        }
-        
-        if (task.getDescription() != null && task.getDescription().length() > 500) {
-            throw new IllegalArgumentException("Description exceeds maximum length of 500 characters");
-        }
+        validateEntity(task, OnCreate.class);
     }
 
     @Override
     public void validateTaskBeforeUpdate(Task existingTask, Task updatedTask) {
-        if (updatedTask.getTitle() == null || updatedTask.getTitle().isEmpty()) {
-            throw new IllegalArgumentException("Title must not be empty");
-        }
+        validateEntity(updatedTask, OnUpdate.class);
+    }
+
+    private void validateEntity(Object object, Class<?>... groups) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Object>> violations = validator.validate(object, groups);
         
-        if (updatedTask.getTitle().length() > 100) {
-            throw new IllegalArgumentException("Title exceeds maximum length of 100 characters");
-        }
-        
-        if (updatedTask.getDescription() != null && updatedTask.getDescription().length() > 500) {
-            throw new IllegalArgumentException("Description exceeds maximum length of 500 characters");
+        if (!violations.isEmpty()) {
+            throw new IllegalArgumentException(violations.iterator().next().getMessage());
         }
     }
 }
