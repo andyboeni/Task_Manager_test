@@ -2,6 +2,7 @@ package org.imrofli.taskmanager.service;
 
 import jakarta.transaction.Transactional;
 import org.imrofli.taskmanager.entity.Task;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,4 +29,8 @@ public interface TaskService {
     void validateTaskBeforeCreate(Task task);
 
     void validateTaskBeforeUpdate(Task existingTask, Task updatedTask);
+
+    List<Task> getTasksWithPagination(int pageNumber, int pageSize, String searchTerm, String sortBy, String orderBy);
+
+    Long countTasks(String searchTerm);
 }

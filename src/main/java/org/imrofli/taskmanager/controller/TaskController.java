@@ -33,6 +33,32 @@ public class TaskController {
             .toList());
     }
 
+    @GetMapping(value = "/paginated", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<org.imrofli.taskmanager.dto.PaginatedResponse> getTasksWithPagination(
+        @RequestParam(defaultValue = "0") int pageNumber,
+        @RequestParam(defaultValue = "10") int pageSize,
+        @RequestParam(required = false) String searchTerm,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "ASC") String orderBy
+    ) {
+        List<Task> tasks = taskService.getTasksWithPagination(pageNumber, pageSize, searchTerm, sortBy, orderBy);
+        Long totalItems = taskService.countTasks(searchTerm);
+        
+        return ResponseEntity.ok(new org.imrofli.taskmanager.dto.PaginatedResponse(
+            tasks.stream()
+                .map(task -> new TaskResponse(
+                    task.getId(),
+                    task.getTitle(),
+                    task.getDescription(),
+                    task.getStatus(),
+                    task.getPriority(),
+                    task.getDueDate()
+                ))
+                .toList(),
+            totalItems
+        ));
+    }
+
     private TaskResponse toTaskResponse(Task task) {
         return new TaskResponse(
             task.getId(),
