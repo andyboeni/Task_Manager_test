@@ -3,6 +3,7 @@ package org.imrofli.taskmanager.controller;
 import jakarta.validation.Valid;
 import org.imrofli.taskmanager.dto.TaskResponse;
 import org.imrofli.taskmanager.entity.Task;
+import org.imrofli.taskmanager.entity.TaskStatus;
 import org.imrofli.taskmanager.exception.TaskNotFoundException;
 import org.imrofli.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,5 +23,5 @@ public record TaskPatchRequest(
     LocalDate dueDate
 ) {}
 
-interface OnCreate {}
-interface OnUpdate {}
+public interface OnCreate {}
+public interface OnUpdate {}
