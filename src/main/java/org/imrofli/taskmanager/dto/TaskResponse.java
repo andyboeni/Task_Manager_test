@@ -1,8 +1,15 @@
 package org.imrofli.taskmanager.dto;
 
-import java.util.List;
+import org.imrofli.taskmanager.entity.TaskPriority;
+import org.imrofli.taskmanager.entity.TaskStatus;
 
-public record PaginatedResponse(
-    List<TaskResponse> tasks,
-    Long totalItems
+import java.time.LocalDate;
+
+public record TaskResponse(
+    Long id,
+    String title,
+    String description,
+    TaskStatus status,
+    TaskPriority priority,
+    LocalDate dueDate
 ) {}
