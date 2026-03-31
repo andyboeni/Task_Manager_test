@@ -76,11 +76,7 @@ public class TaskServiceImpl implements TaskService {
             return taskRepository.findAll(pageable).getContent();
         }
         
-        return taskRepository.findByTitleContainingOrDescriptionContaining(
-            searchTerm.toLowerCase(), 
-            searchTerm.toLowerCase(),
-            pageable
-        );
+        return taskRepository.findByTitleContainingOrDescriptionContaining(searchTerm.toLowerCase(), pageable);
     }
 
     @Override
@@ -88,7 +84,7 @@ public class TaskServiceImpl implements TaskService {
         if (searchTerm == null || searchTerm.isEmpty()) {
             return taskRepository.count();
         }
-        return taskRepository.countByTitleContainingOrDescriptionContaining(searchTerm, searchTerm);
+        return taskRepository.countByTitleContainingOrDescriptionContaining(searchTerm.toLowerCase());
     }
 
     @Override

@@ -14,14 +14,3 @@ public record TaskRequest(
     TaskPriority priority,
     LocalDate dueDate
 ) {}
-
-public record TaskPatchRequest(
-    @Size(max = 100, groups = OnUpdate.class) String title,
-    @Size(max = 500, groups = OnUpdate.class) String description,
-    TaskStatus status,
-    TaskPriority priority,
-    LocalDate dueDate
-) {}
-
-public interface OnCreate {}
-public interface OnUpdate {}
