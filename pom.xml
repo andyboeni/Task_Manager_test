@@ -68,9 +68,14 @@
 
         <!-- Jakarta EL -->
         <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.el</artifactId>
-            <version>5.0.0</version>
+            <version>4.0.2</version>
         </dependency>
 
         <!-- Actuator -->
