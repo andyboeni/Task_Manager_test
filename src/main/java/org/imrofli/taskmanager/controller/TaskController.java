@@ -7,10 +7,8 @@ import org.imrofli.taskmanager.dto.TaskPatchRequest;
 import org.imrofli.taskmanager.dto.TaskRequest;
 import org.imrofli.taskmanager.dto.TaskResponse;
 import org.imrofli.taskmanager.entity.Task;
-import org.imrofli.taskmanager.entity.TaskStatus;
 import org.imrofli.taskmanager.exception.TaskNotFoundException;
 import org.imrofli.taskmanager.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,6 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @Autowired
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
@@ -90,7 +87,7 @@ public class TaskController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> createTask(@Validated(OnCreate.class) @RequestBody TaskRequest request) {
+    public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
         Task task = new Task();
         task.setTitle(request.title());
         task.setDescription(request.description());
@@ -105,7 +102,7 @@ public class TaskController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Validated(OnUpdate.class) @RequestBody TaskRequest request) {
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest request) {
         try {
             Task existingTask = taskService.getTaskById(id).orElseThrow();
             
@@ -133,7 +130,7 @@ public class TaskController {
     }
 
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> patchTask(@PathVariable Long id, @Validated(OnUpdate.class) @RequestBody TaskPatchRequest request) {
+    public ResponseEntity<TaskResponse> patchTask(@PathVariable Long id, @Valid @RequestBody TaskPatchRequest request) {
         try {
             Task existingTask = taskService.getTaskById(id).orElseThrow();
             
