@@ -2,6 +2,7 @@ package org.imrofli.taskmanager.service;
 
 import jakarta.transaction.Transactional;
 import org.imrofli.taskmanager.entity.Task;
+import org.imrofli.taskmanager.entity.TaskPriority;
 import org.imrofli.taskmanager.entity.TaskStatus;
 import org.imrofli.taskmanager.repository.TaskRepository;
 import org.junit.jupiter.api.BeforeEach;

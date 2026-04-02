@@ -2,6 +2,7 @@ package org.imrofli.taskmanager.repository;
 
 import jakarta.persistence.EntityManager;
 import org.imrofli.taskmanager.entity.Task;
+import org.imrofli.taskmanager.entity.TaskPriority;
 import org.imrofli.taskmanager.entity.TaskStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
