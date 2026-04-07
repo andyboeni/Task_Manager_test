@@ -75,15 +75,11 @@ public class TaskController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
-        try {
-            Optional<Task> task = taskService.getTaskById(id);
-            if (task.isPresent()) {
-                return ResponseEntity.ok(toTaskResponse(task.get()));
-            }
-            return ResponseEntity.notFound().build();
-        } catch (TaskNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        Optional<Task> task = taskService.getTaskById(id);
+        if (task.isPresent()) {
+            return ResponseEntity.ok(toTaskResponse(task.get()));
         }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -103,55 +99,37 @@ public class TaskController {
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest request) {
-        try {
-            Task existingTask = taskService.getTaskById(id).orElseThrow();
-            
-            existingTask.setTitle(request.title());
-            existingTask.setDescription(request.description());
-            existingTask.setStatus(request.status());
-            existingTask.setDueDate(request.dueDate());
-
-            Task updatedTask = taskService.updateTask(existingTask);
-            
-            return ResponseEntity.ok(toTaskResponse(updatedTask));
-        } catch (TaskNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Task existingTask = taskService.getTaskById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        existingTask.setTitle(request.title());
+        existingTask.setDescription(request.description());
+        existingTask.setStatus(request.status());
+        existingTask.setDueDate(request.dueDate());
+        Task updatedTask = taskService.updateTask(existingTask);
+        return ResponseEntity.ok(toTaskResponse(updatedTask));
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        try {
-            taskService.deleteTask(id);
-            return ResponseEntity.noContent().build();
-        } catch (TaskNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> patchTask(@PathVariable Long id, @Valid @RequestBody TaskPatchRequest request) {
-        try {
-            Task existingTask = taskService.getTaskById(id).orElseThrow();
-            
-            if (request.title() != null && !request.title().isEmpty()) {
-                existingTask.setTitle(request.title());
-            }
-            if (request.description() != null) {
-                existingTask.setDescription(request.description());
-            }
-            if (request.status() != null) {
-                existingTask.setStatus(request.status());
-            }
-            if (request.dueDate() != null) {
-                existingTask.setDueDate(request.dueDate());
-            }
-
-            Task updatedTask = taskService.updateTask(existingTask);
-            
-            return ResponseEntity.ok(toTaskResponse(updatedTask));
-        } catch (TaskNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        Task existingTask = taskService.getTaskById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        if (request.title() != null && !request.title().isEmpty()) {
+            existingTask.setTitle(request.title());
         }
+        if (request.description() != null) {
+            existingTask.setDescription(request.description());
+        }
+        if (request.status() != null) {
+            existingTask.setStatus(request.status());
+        }
+        if (request.dueDate() != null) {
+            existingTask.setDueDate(request.dueDate());
+        }
+        Task updatedTask = taskService.updateTask(existingTask);
+        return ResponseEntity.ok(toTaskResponse(updatedTask));
     }
 }

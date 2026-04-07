@@ -76,7 +76,7 @@ public class TaskServiceImpl implements TaskService {
             return taskRepository.findAll(pageable).getContent();
         }
         
-        return taskRepository.findByTitleContainingOrDescriptionContaining(searchTerm.toLowerCase(), pageable);
+        return taskRepository.findByTitleContainingOrDescriptionContaining(searchTerm.toLowerCase(), searchTerm.toLowerCase(), pageable);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class TaskServiceImpl implements TaskService {
         if (searchTerm == null || searchTerm.isEmpty()) {
             return taskRepository.count();
         }
-        return taskRepository.countByTitleContainingOrDescriptionContaining(searchTerm.toLowerCase());
+        return taskRepository.countByTitleContainingOrDescriptionContaining(searchTerm.toLowerCase(), searchTerm.toLowerCase());
     }
 
     @Override
@@ -98,10 +98,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private void validateEntity(Object object, Class<?>... groups) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
         Set<ConstraintViolation<Object>> violations = validator.validate(object, groups);
-        
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException(violations.iterator().next().getMessage());
         }

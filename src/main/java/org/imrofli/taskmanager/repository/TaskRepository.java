@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     
-    List<Task> findByTitleContainingOrDescriptionContaining(String searchTerm, Pageable pageable);
+    List<Task> findByTitleContainingOrDescriptionContaining(String titleTerm, String descriptionTerm, Pageable pageable);
     
-    long countByTitleContainingOrDescriptionContaining(String searchTerm);
+    long countByTitleContainingOrDescriptionContaining(String titleTerm, String descriptionTerm);
 }
