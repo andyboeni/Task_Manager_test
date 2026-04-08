@@ -2,6 +2,7 @@ import { Container, Row, Col, Card, Button, Form, Pagination } from 'react-boots
 import { useState, useEffect } from 'react';
 import { AddTaskModal } from '../components/AddTaskModal';
 import { UpdateTask } from '../components/UpdateTask';
+import { TaskCard } from '../components/TaskCard';
 import taskApi from '../api/taskApi';
 import { Task, TaskFormData, TaskStatus } from '../types/task';
 
@@ -106,7 +107,7 @@ export const TaskManagerPage = () => {
                     <Form.Label>Sort by</Form.Label>
                     <Form.Select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value)}
                     >
                       <option value="id">ID</option>
                       <option value="title">Title</option>
@@ -120,7 +121,7 @@ export const TaskManagerPage = () => {
                     <Form.Label>Order</Form.Label>
                     <Form.Select
                       value={orderBy}
-                      onChange={(e) => setOrderBy(e.target.value as 'asc' | 'desc')}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOrderBy(e.target.value as 'asc' | 'desc')}
                     >
                       <option value="asc">Ascending</option>
                       <option value="desc">Descending</option>
@@ -132,7 +133,7 @@ export const TaskManagerPage = () => {
                     <Form.Label>Items per page</Form.Label>
                     <Form.Select
                       value={itemsPerPage}
-                      onChange={(e) => {
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setItemsPerPage(Number(e.target.value));
                         setCurrentPage(0);
                         loadTasks();
@@ -155,8 +156,8 @@ export const TaskManagerPage = () => {
                       <Col key={task.id}>
                         <TaskCard 
                           task={task} 
-                          onEdit={(task) => setSelectedTask(task)}
-                          onDelete={(id) => {
+                          onEdit={(task: Task) => setSelectedTask(task)}
+                          onDelete={(id: number) => {
                             taskApi.deleteTask(id).then(() => loadTasks());
                           }}
                         />
