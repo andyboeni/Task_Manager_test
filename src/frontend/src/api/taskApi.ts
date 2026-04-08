@@ -18,7 +18,7 @@ const taskApi = {
                 pageSize: pageSize,
                 searchTerm: searchTerm?.toLowerCase(),
                 sortBy: sortBy,
-                orderBy: orderBy?.toUpperCase()
+                orderBy: orderBy?.toLowerCase()
             }
         }),
     
