@@ -1,6 +1,6 @@
+import { Modal, Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { TaskFormData, TaskStatus, TaskPriority } from '../types/task';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface AddTaskModalProps {
   isOpen: boolean;
@@ -26,125 +26,86 @@ export const AddTaskModal = ({ isOpen, onClose, onSubmit }: AddTaskModalProps) =
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="text-xl font-semibold">Add New Task</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-            aria-label="Close"
-          >
-            <XMarkIcon className="h-6 w-6" />
-          </button>
-        </div>
-        
-        <form 
-          className="space-y-4 p-4"
-          onSubmit={handleSubmit(handleFormSubmit)}
-        >
-          <div>
-            <label className="block text-sm font-medium mb-1">Title</label>
-            <input
-              {...register('title', {
-                required: 'Title is required',
-                maxLength: {
-                  value: 100,
-                  message: 'Title must be at most 100 characters'
-                }
-              })}
-              className="w-full p-2 border rounded-md"
-              placeholder="Enter task title"
+    <Modal show={isOpen} onHide={onClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>Add New Task</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit(handleFormSubmit)}>
+          <Form.Group className="mb-3" controlId="title">
+            <Form.Label>Title</Form.Label>
+            <Form.Control 
+              type="text" 
+              {...register('title', { required: true, maxLength: 100 })} 
+              isInvalid={!!errors.title}
             />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-            )}
-          </div>
+            <Form.Control.Feedback type="invalid">
+              {errors.title?.message || 'Title is required'}
+            </Form.Control.Feedback>
+          </Form.Group>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
-            <textarea
-              {...register('description', {
-                maxLength: {
-                  value: 500,
-                  message: 'Description must be at most 500 characters'
-                }
-              })}
-              className="w-full p-2 border rounded-md"
-              placeholder="Enter task description"
+          <Form.Group className="mb-3" controlId="description">
+            <Form.Label>Description</Form.Label>
+            <Form.Control 
+              as="textarea" 
               rows={3}
+              {...register('description', { maxLength: 500 })}
+              isInvalid={!!errors.description}
             />
-            {errors.description?.message && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.description.message}
-              </p>
-            )}
-          </div>
+          </Form.Group>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Status</label>
-            <select
-              {...register('status', {
-                required: 'Status is required'
-              })}
-              className="w-full p-2 border rounded-md"
+          <Form.Group className="mb-3" controlId="status">
+            <Form.Label>Status</Form.Label>
+            <Form.Select 
+              {...register('status', { required: true })}
+              isInvalid={!!errors.status}
             >
-              <option value="TODO">To Do</option>
-              <option value="IN_PROGRESS">In Progress</option>
-              <option value="DONE">Done</option>
-            </select>
-            {errors.status && (
-              <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
-            )}
-          </div>
+              <option value="">Select status</option>
+              <option value="TODO">TODO</option>
+              <option value="IN_PROGRESS">IN_PROGRESS</option>
+              <option value="DONE">DONE</option>
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Status is required
+            </Form.Control.Feedback>
+          </Form.Group>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Priority</label>
-            <select
-              {...register('priority', {
-                required: 'Priority is required'
-              })}
-              className="w-full p-2 border rounded-md"
+          <Form.Group className="mb-3" controlId="priority">
+            <Form.Label>Priority</Form.Label>
+            <Form.Select 
+              {...register('priority', { required: true })}
+              isInvalid={!!errors.priority}
             >
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-              <option value="URGENT">Urgent</option>
-            </select>
-            {errors.priority && (
-              <p className="text-red-500 text-sm mt-1">{errors.priority.message}</p>
-            )}
-          </div>
+              <option value="">Select priority</option>
+              <option value="LOW">LOW</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="HIGH">HIGH</option>
+              <option value="URGENT">URGENT</option>
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Priority is required
+            </Form.Control.Feedback>
+          </Form.Group>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Due Date</label>
-            <input
-              type="date"
+          <Form.Group className="mb-3" controlId="dueDate">
+            <Form.Label>Due Date</Form.Label>
+            <Form.Control 
+              type="date" 
               {...register('dueDate')}
-              className="w-full p-2 border rounded-md"
             />
-          </div>
+          </Form.Group>
 
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
-            >
+          <div className="d-flex justify-content-end mt-4">
+            <Button variant="secondary" onClick={onClose} className="me-2">
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Add Task
-            </button>
+            </Button>
+            <Button variant="primary" type="submit">
+              Create Task
+            </Button>
           </div>
-        </form>
-      </div>
-    </div>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
