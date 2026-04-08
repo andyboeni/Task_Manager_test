@@ -1,6 +1,7 @@
 package org.imrofli.taskmanager.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.imrofli.taskmanager.entity.TaskPriority;
 import org.imrofli.taskmanager.entity.TaskStatus;
