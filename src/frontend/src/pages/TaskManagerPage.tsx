@@ -92,8 +92,8 @@ export const TaskManagerPage = () => {
                     type="text"
                     placeholder="Search tasks..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyUp={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                    onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
                       if (e.key === 'Enter') {
                         setCurrentPage(0);
                         loadTasks();
