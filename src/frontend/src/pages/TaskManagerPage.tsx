@@ -3,7 +3,7 @@ import { AddTask } from '../components/AddTask';
 import { TaskList } from '../components/TaskList';
 import { UpdateTask } from '../components/UpdateTask';
 import taskApi from '../api/taskApi';
-import { Task, TaskFormData } from '../types/task';
+import { Task, TaskFormData, TaskStatus } from '../types/task';
 
 export const TaskManagerPage = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -22,7 +22,7 @@ export const TaskManagerPage = () => {
                 itemsPerPage,
                 searchTerm,
                 sortBy,
-                orderBy === 'asc' ? 'ASC' : 'DESC'
+                orderBy === 'asc' ? 'asc' : 'desc'
             );
             
             setTasks(response.data.tasks);

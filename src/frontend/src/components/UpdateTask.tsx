@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { TaskFormData, TaskStatus, TaskPriority } from '../types/task';
+import { Task, TaskFormData, TaskStatus, TaskPriority } from '../types/task';
 
 interface UpdateTaskProps {
     task: Task;
