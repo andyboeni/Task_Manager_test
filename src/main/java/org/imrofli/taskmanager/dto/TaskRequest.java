@@ -11,6 +11,6 @@ public record TaskRequest(
     @NotBlank(groups = OnCreate.class) @Size(max = 100, groups = {OnCreate.class, OnUpdate.class}) String title,
     @Size(max = 500, groups = {OnCreate.class, OnUpdate.class}) String description,
     @NotBlank(groups = OnCreate.class) TaskStatus status,
-    TaskPriority priority,
+    @NotNull                    TaskPriority priority,
     LocalDate dueDate
 ) {}
