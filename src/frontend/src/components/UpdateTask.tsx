@@ -15,8 +15,8 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
         defaultValues: {
             title: task.title,
             description: task.description,
-            status: task.status as TaskStatus,
-            priority: task.priority as TaskPriority,
+            status: task.status,
+            priority: task.priority,
         }
     });
 
