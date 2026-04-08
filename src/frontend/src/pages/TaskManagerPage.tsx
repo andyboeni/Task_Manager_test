@@ -148,7 +148,7 @@ export const TaskManagerPage = () => {
               </Row>
 
               {tasks.length === 0 ? (
-                <p className="text-gray-600">No tasks found</p>
+                <p className="text-muted">No tasks found</p>
               ) : (
                 <>
                   <Row xs={1} md={2} lg={3} className="g-4">
