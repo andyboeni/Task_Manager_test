@@ -36,10 +36,10 @@ export const TaskCard = ({ task, onEdit, onDelete }: { task: Task; onEdit: (task
         </div>
         <div className="mt-3 d-flex gap-2">
           <Button variant="outline-primary" onClick={() => onEdit(task)}>
-            <PencilIcon className="h-4 w-4" />
+            <PencilIcon className="h-5 w-5 text-blue-500" />
           </Button>
           <Button variant="danger" onClick={() => onDelete(task.id)}>
-            <TrashIcon className="h-4 w-4" />
+            <TrashIcon className="h-5 w-5 text-white" />
           </Button>
         </div>
       </Card.Body>
