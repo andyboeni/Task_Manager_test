@@ -1,4 +1,3 @@
-import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { Task, TaskFormData, TaskStatus, TaskPriority } from '../types/task';
 
@@ -22,10 +21,10 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
     });
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group className="mb-3" controlId="title">
-                <Form.Label>Title</Form.Label>
-                <Form.Control
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input
                     {...register('title', {
                         required: 'Title is required',
                         maxLength: {
@@ -33,17 +32,18 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
                             message: 'Title must be at most 100 characters'
                         }
                     })}
-                    isInvalid={!!errors.title}
+                    className={`w-full px-3 py-2 border rounded-md ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
                 />
-                <Form.Control.Feedback type="invalid">
-                    {errors.title?.message || 'Title is required'}
-                </Form.Control.Feedback>
-            </Form.Group>
+                {errors.title && (
+                    <p className="mt-1 text-sm text-red-600">
+                        {errors.title.message || 'Title is required'}
+                    </p>
+                )}
+            </div>
 
-            <Form.Group className="mb-3" controlId="description">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                    as="textarea"
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
                     rows={3}
                     {...register('description', {
                         maxLength: {
@@ -51,51 +51,60 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
                             message: 'Description must be at most 500 characters'
                         }
                     })}
-                    isInvalid={!!errors.description}
+                    className={`w-full px-3 py-2 border rounded-md ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
                 />
-                <Form.Control.Feedback type="invalid">
-                    {errors.description?.message}
-                </Form.Control.Feedback>
-            </Form.Group>
+                {errors.description && (
+                    <p className="mt-1 text-sm text-red-600">
+                        {errors.description.message}
+                    </p>
+                )}
+            </div>
 
-            <Form.Group className="mb-3" controlId="status">
-                <Form.Label>Status</Form.Label>
-                <Form.Select
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select
                     {...register('status', {
                         required: 'Status is required'
                     })}
-                    isInvalid={!!errors.status}
+                    className={`w-full px-3 py-2 border rounded-md ${errors.status ? 'border-red-500' : 'border-gray-300'}`}
                 >
                     <option value="TODO">To Do</option>
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="DONE">Done</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                    {errors.status?.message || 'Status is required'}
-                </Form.Control.Feedback>
-            </Form.Group>
+                </select>
+                {errors.status && (
+                    <p className="mt-1 text-sm text-red-600">
+                        {errors.status.message || 'Status is required'}
+                    </p>
+                )}
+            </div>
 
-            <Form.Group className="mb-3" controlId="priority">
-                <Form.Label>Priority</Form.Label>
-                <Form.Select
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                <select
                     {...register('priority', {
                         required: 'Priority is required'
                     })}
-                    isInvalid={!!errors.priority}
+                    className={`w-full px-3 py-2 border rounded-md ${errors.priority ? 'border-red-500' : 'border-gray-300'}`}
                 >
                     <option value="LOW">Low</option>
                     <option value="MEDIUM">Medium</option>
                     <option value="HIGH">High</option>
                     <option value="URGENT">Urgent</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                    {errors.priority?.message || 'Priority is required'}
-                </Form.Control.Feedback>
-            </Form.Group>
+                </select>
+                {errors.priority && (
+                    <p className="mt-1 text-sm text-red-600">
+                        {errors.priority.message || 'Priority is required'}
+                    </p>
+                )}
+            </div>
 
-            <Button variant="primary" type="submit" className="w-100">
+            <button
+                type="submit"
+                className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+            >
                 Update Task
-            </Button>
-        </Form>
+            </button>
+        </form>
     );
 };

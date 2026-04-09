@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { AddTaskModal } from '../components/AddTaskModal';
 import { UpdateTask } from '../components/UpdateTask';
 import { TaskCard } from '../components/TaskCard';
+import { ErrorMessage } from '../components/ErrorMessage';
 import taskApi from '../api/taskApi';
 import { Task, TaskFormData, TaskStatus } from '../types/task';
 
@@ -16,9 +17,11 @@ export const TaskManagerPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [totalItems, setTotalItems] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const loadTasks = async () => {
     try {
+      setError(null);
       const response = await taskApi.getAllTasksWithPagination(
         currentPage,
         itemsPerPage,
@@ -29,8 +32,9 @@ export const TaskManagerPage = () => {
       
       setTasks(response.data.tasks);
       setTotalItems(response.data.totalItems || 0);
-    } catch (error) {
-      console.error('Failed to load tasks:', error);
+    } catch (err) {
+      setError('Failed to load tasks. Please try again.');
+      console.error('Failed to load tasks:', err);
     }
   };
 
@@ -40,21 +44,36 @@ export const TaskManagerPage = () => {
 
   const handleCreateTask = async (data: TaskFormData) => {
     try {
+      setError(null);
       await taskApi.createTask(data);
       await loadTasks();
       setIsAddModalOpen(false);
-    } catch (error) {
-      console.error('Failed to create task:', error);
+    } catch (err) {
+      setError('Failed to create task. Please try again.');
+      console.error('Failed to create task:', err);
     }
   };
 
   const handleUpdateTask = async (id: number, data: TaskFormData) => {
     try {
+      setError(null);
       await taskApi.updateTask(id, data);
       await loadTasks();
       setSelectedTask(null);
-    } catch (error) {
-      console.error('Failed to update task:', error);
+    } catch (err) {
+      setError('Failed to update task. Please try again.');
+      console.error('Failed to update task:', err);
+    }
+  };
+
+  const handleDeleteTask = async (id: number) => {
+    try {
+      setError(null);
+      await taskApi.deleteTask(id);
+      await loadTasks();
+    } catch (err) {
+      setError('Failed to delete task. Please try again.');
+      console.error('Failed to delete task:', err);
     }
   };
 
@@ -67,6 +86,8 @@ export const TaskManagerPage = () => {
           <Button variant="primary" onClick={() => setIsAddModalOpen(true)}>
             Add Task
           </Button>
+          
+          {error && <ErrorMessage message={error} />}
           
           {selectedTask ? (
             <Card className="mt-4">
@@ -157,9 +178,7 @@ export const TaskManagerPage = () => {
                         <TaskCard 
                           task={task} 
                           onEdit={(task: Task) => setSelectedTask(task)}
-                          onDelete={(id: number) => {
-                            taskApi.deleteTask(id).then(() => loadTasks());
-                          }}
+                          onDelete={(id: number) => handleDeleteTask(id)}
                         />
                       </Col>
                     ))}
