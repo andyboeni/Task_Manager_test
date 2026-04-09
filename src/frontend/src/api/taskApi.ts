@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Task, TaskFormData, TaskStatus, TaskPriority } from '../types/task';
 
-const TASK_API_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api/tasks';
+const TASK_API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/tasks';
 
 interface PaginatedResponse {
     tasks: Task[];
