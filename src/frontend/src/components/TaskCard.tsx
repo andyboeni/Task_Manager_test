@@ -33,7 +33,7 @@ export const TaskCard = ({ task, onEdit, onDelete, onUpdate }: { task: Task; onE
         <div className="mt-3 d-flex gap-2">
           <Form.Select 
             value={task.status}
-            onChange={(e) => handleStatusChange(task.id, e.target.value as TaskStatus)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleStatusChange(task.id, e.target.value as TaskStatus)}
             className="me-2"
           >
             <option value="TODO">To Do</option>
