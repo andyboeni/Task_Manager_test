@@ -1,4 +1,3 @@
-import { Container, Row, Col, Card, Button, Form, Pagination } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { AddTaskModal } from '../components/AddTaskModal';
 import { UpdateTask } from '../components/UpdateTask';
@@ -89,136 +88,138 @@ export const TaskManagerPage = () => {
   };
 
   return (
-    <Container fluid className="py-4">
-      <Row>
-        <Col>
-          <h1 className="mb-4">Task Manager</h1>
-          
-          <Button variant="primary" onClick={() => setIsAddModalOpen(true)}>
-            Add Task
-          </Button>
-          
-          {error && <ErrorMessage message={error} />}
-          
-          {selectedTask ? (
-            <Card className="mt-4">
-              <Card.Header>
-                <Card.Title>Edit Task</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <UpdateTask 
-                  task={selectedTask}
-                  onSubmit={(data) => handleUpdateTask(selectedTask.id, data)}
-                />
-                <Button variant="secondary" onClick={() => setSelectedTask(null)} className="mt-3">
-                  Cancel
-                </Button>
-              </Card.Body>
-            </Card>
-          ) : null}
+    <div className="max-w-6xl mx-auto px-4 py-4">
+      <h1 className="mb-4">Task Manager</h1>
+      
+      <button 
+        onClick={() => setIsAddModalOpen(true)}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Add Task
+      </button>
+      
+      {error && <ErrorMessage message={error} />}
+      
+      {selectedTask ? (
+        <div className="border rounded-lg shadow-md p-4 mt-4 bg-white">
+          <h2 className="text-lg font-bold mb-2">Edit Task</h2>
+          <div className="mt-2">
+            <UpdateTask 
+              task={selectedTask}
+              onSubmit={(data) => handleUpdateTask(selectedTask.id, data)}
+            />
+            <button 
+              onClick={() => setSelectedTask(null)}
+              className="border border-gray-300 text-gray-700 px-4 py-2 rounded mt-3 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : null}
 
-          <Card className="mt-4">
-            <Card.Body>
-              <Row className="align-items-center mb-3">
-                <Col md={4}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Search tasks..."
-                    value={searchTerm}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-                    onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === 'Enter') {
-                        setCurrentPage(0);
-                        loadTasks();
-                      }
-                    }}
+      <div className="border rounded-lg shadow-md p-4 mt-4 bg-white">
+        <div className="flex flex-wrap items-center mb-3 gap-4">
+          <div className="w-full md:w-1/3">
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') {
+                  setCurrentPage(0);
+                  loadTasks();
+                }
+              }}
+              className="border rounded px-3 py-2 w-full"
+            />
+          </div>
+          <div className="w-full md:w-1/3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Sort by</label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="border rounded px-3 py-2 w-full"
+            >
+              <option value="id">ID</option>
+              <option value="title">Title</option>
+              <option value="status">Status</option>
+              <option value="priority">Priority</option>
+            </select>
+          </div>
+          <div className="w-full md:w-1/6">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
+            <select
+              value={orderBy}
+              onChange={(e) => setOrderBy(e.target.value as 'asc' | 'desc')}
+              className="border rounded px-3 py-2 w-full"
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+          <div className="w-full md:w-1/6">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Items per page</label>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(0);
+                loadTasks();
+              }}
+              className="border rounded px-3 py-2 w-full"
+            >
+              {[5, 10, 20, 50].map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {tasks.length === 0 ? (
+          <p className="text-gray-500">No tasks found</p>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+              {tasks.map(task => (
+                <div key={task.id} className="col-span-1">
+                  <TaskCard 
+                    task={task} 
+                    onEdit={(task: Task) => setSelectedTask(task)}
+                    onDelete={(id: number) => handleDeleteTask(id)}
+                    onUpdate={handleUpdateTaskStatus}
                   />
-                </Col>
-                <Col md={4}>
-                  <Form.Group controlId="sortBy">
-                    <Form.Label>Sort by</Form.Label>
-                    <Form.Select
-                      value={sortBy}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value)}
-                    >
-                      <option value="id">ID</option>
-                      <option value="title">Title</option>
-                      <option value="status">Status</option>
-                      <option value="priority">Priority</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col md={2}>
-                  <Form.Group controlId="orderBy">
-                    <Form.Label>Order</Form.Label>
-                    <Form.Select
-                      value={orderBy}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOrderBy(e.target.value as 'asc' | 'desc')}
-                    >
-                      <option value="asc">Ascending</option>
-                      <option value="desc">Descending</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col md={2}>
-                  <Form.Group controlId="itemsPerPage">
-                    <Form.Label>Items per page</Form.Label>
-                    <Form.Select
-                      value={itemsPerPage}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        setItemsPerPage(Number(e.target.value));
-                        setCurrentPage(0);
-                        loadTasks();
-                      }}
-                    >
-                      {[5, 10, 20, 50].map((size) => (
-                        <option key={size} value={size}>{size}</option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              {tasks.length === 0 ? (
-                <p className="text-muted">No tasks found</p>
-              ) : (
-                <>
-                  <Row xs={1} md={2} lg={3} className="g-4">
-                    {tasks.map(task => (
-                      <Col key={task.id}>
-                        <TaskCard 
-                          task={task} 
-                          onEdit={(task: Task) => setSelectedTask(task)}
-                          onDelete={(id: number) => handleDeleteTask(id)}
-                          onUpdate={handleUpdateTaskStatus}
-                        />
-                      </Col>
-                    ))}
-                  </Row>
-                  
-                  <Pagination className="mt-3">
-                    <Pagination.Prev 
-                      onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
-                      disabled={currentPage === 0}
-                    />
-                    <Pagination.Item>{currentPage + 1}</Pagination.Item>
-                    <Pagination.Next 
-                      onClick={() => setCurrentPage(p => p + 1)}
-                      disabled={(currentPage + 1) * itemsPerPage >= totalItems}
-                    />
-                  </Pagination>
-                </>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex justify-center mt-4">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                disabled={currentPage === 0}
+                className="px-3 py-1 border rounded mr-2"
+              >
+                Previous
+              </button>
+              <span className="mx-2">{currentPage + 1}</span>
+              <button 
+                onClick={() => setCurrentPage(p => p + 1)}
+                disabled={(currentPage + 1) * itemsPerPage >= totalItems}
+                className="px-3 py-1 border rounded ml-2"
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+      </div>
       
       <AddTaskModal 
         isOpen={isAddModalOpen} 
         onClose={() => setIsAddModalOpen(false)} 
         onSubmit={handleCreateTask} 
       />
-    </Container>
+    </div>
   );
 };
