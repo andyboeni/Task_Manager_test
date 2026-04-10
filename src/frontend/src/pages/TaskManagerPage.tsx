@@ -77,6 +77,17 @@ export const TaskManagerPage = () => {
     }
   };
 
+  const handleUpdateTaskStatus = async (id: number, data: Partial<Task>) => {
+    try {
+      setError(null);
+      await taskApi.updateTask(id, data as TaskFormData);
+      await loadTasks();
+    } catch (err) {
+      setError('Failed to update task status. Please try again.');
+      console.error('Failed to update task status:', err);
+    }
+  };
+
   return (
     <Container fluid className="py-4">
       <Row>
@@ -179,6 +190,7 @@ export const TaskManagerPage = () => {
                           task={task} 
                           onEdit={(task: Task) => setSelectedTask(task)}
                           onDelete={(id: number) => handleDeleteTask(id)}
+                          onUpdate={handleUpdateTaskStatus}
                         />
                       </Col>
                     ))}
