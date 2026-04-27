@@ -200,38 +200,38 @@ export const TaskManagerPage = () => {
                     onDelete={(id: number) => handleDeleteTask(id)}
                     onUpdate={handleUpdateTaskStatus}
                   />
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex justify-center items-center mt-8 gap-4">
-              <button 
-                onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
-                disabled={currentPage === 0}
-                className="modern-pagination px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
-              >
-                Previous
-              </button>
-              <span className="text-slate-600 font-medium">
-                Page {currentPage + 1} of {Math.ceil(totalItems / itemsPerPage)}
-              </span>
-              <button 
-                onClick={() => setCurrentPage(p => p + 1)}
-                disabled={(currentPage + 1) * itemsPerPage >= totalItems}
-                className="modern-pagination px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
-              >
-                Next
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-      
-      <AddTaskModal 
-        isOpen={isAddModalOpen} 
-        onClose={() => setIsAddModalOpen(false)} 
-        onSubmit={handleCreateTask} 
-      />
+                ))}
+              </div>
+              
+              <div className="flex justify-center items-center mt-8 gap-4">
+                <button 
+                  onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                  disabled={currentPage === 0}
+                  className="modern-pagination px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                >
+                  Previous
+                </button>
+                <span className="text-slate-600 font-medium">
+                  Page {currentPage + 1} of {Math.ceil(totalItems / itemsPerPage)}
+                </span>
+                <button 
+                  onClick={() => setCurrentPage(p => p + 1)}
+                  disabled={(currentPage + 1) * itemsPerPage >= totalItems}
+                  className="modern-pagination px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+        
+        <AddTaskModal 
+          isOpen={isAddModalOpen} 
+          onClose={() => setIsAddModalOpen(false)} 
+          onSubmit={handleCreateTask} 
+        />
+      </main>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { motion as framerMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface ErrorMessageProps {
   message: string;
@@ -6,7 +6,7 @@ interface ErrorMessageProps {
 
 export const ErrorMessage = ({ message }: ErrorMessageProps) => {
   return (
-    <framerMotion.div
+    <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -32,10 +32,6 @@ export const ErrorMessage = ({ message }: ErrorMessageProps) => {
           </svg>
         </button>
       </div>
-    </framerMotion.div>
+    </motion.div>
   );
 };
-
-
-
-
