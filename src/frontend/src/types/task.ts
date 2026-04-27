@@ -8,6 +8,7 @@ export interface Task {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate?: string;
+  assignee?: string;
 }
 
-export type TaskFormData = Omit<Task, 'id'>;
+export type TaskFormData = Task;
