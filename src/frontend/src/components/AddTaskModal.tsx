@@ -28,96 +28,113 @@ export const AddTaskModal = ({ isOpen, onClose, onSubmit }: AddTaskModalProps) =
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold">Add New Task</h3>
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="modern-modal w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold text-slate-800">Create New Task</h3>
             <button 
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-slate-400 hover:text-slate-600 transition-colors"
             >
-              ✕
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
           
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Task Title <span className="text-rose-500">*</span>
+              </label>
               <input
                 type="text"
+                placeholder="Enter task title..."
                 {...register('title', { required: true, maxLength: 100 })}
-                className={`w-full px-3 py-2 border rounded-md ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
+                className={`input-modern ${errors.title ? 'border-rose-500 focus:ring-rose-500/20' : ''}`}
               />
               {errors.title && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-rose-600">
                   {errors.title.message || 'Title is required'}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
               <textarea
                 rows={3}
+                placeholder="Add more details..."
                 {...register('description', { maxLength: 500 })}
-                className={`w-full px-3 py-2 border rounded-md ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                className={`input-modern resize-none ${errors.description ? 'border-rose-500 focus:ring-rose-500/20' : ''}`}
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select
-                {...register('status', { required: true })}
-                className={`w-full px-3 py-2 border rounded-md ${errors.status ? 'border-red-500' : 'border-gray-300'}`}
-              >
-                <option value="">Select status</option>
-                <option value="TODO">TODO</option>
-                <option value="IN_PROGRESS">IN_PROGRESS</option>
-                <option value="DONE">DONE</option>
-              </select>
-              {errors.status && (
-                <p className="mt-1 text-sm text-red-600">Status is required</p>
+              {errors.description && (
+                <p className="mt-1 text-sm text-rose-600">
+                  {errors.description.message || 'Description must be at most 500 characters'}
+                </p>
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-              <select
-                {...register('priority', { required: true })}
-                className={`w-full px-3 py-2 border rounded-md ${errors.priority ? 'border-red-500' : 'border-gray-300'}`}
-              >
-                <option value="">Select priority</option>
-                <option value="LOW">LOW</option>
-                <option value="MEDIUM">MEDIUM</option>
-                <option value="HIGH">HIGH</option>
-                <option value="URGENT">URGENT</option>
-              </select>
-              {errors.priority && (
-                <p className="mt-1 text-sm text-red-600">Priority is required</p>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Status <span className="text-rose-500">*</span>
+                </label>
+                <select
+                  {...register('status', { required: true })}
+                  className={`select-modern ${errors.status ? 'border-rose-500 focus:ring-rose-500/20' : ''}`}
+                >
+                  <option value="">Select status</option>
+                  <option value="TODO">TODO</option>
+                  <option value="IN_PROGRESS">IN_PROGRESS</option>
+                  <option value="DONE">DONE</option>
+                </select>
+                {errors.status && (
+                  <p className="mt-1 text-sm text-rose-600">Status is required</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Priority <span className="text-rose-500">*</span>
+                </label>
+                <select
+                  {...register('priority', { required: true })}
+                  className={`select-modern ${errors.priority ? 'border-rose-500 focus:ring-rose-500/20' : ''}`}
+                >
+                  <option value="">Select priority</option>
+                  <option value="LOW">LOW</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="HIGH">HIGH</option>
+                  <option value="URGENT">URGENT</option>
+                </select>
+                {errors.priority && (
+                  <p className="mt-1 text-sm text-rose-600">Priority is required</p>
+                )}
+              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Due Date</label>
               <input
                 type="date"
                 {...register('dueDate')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="input-modern"
               />
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
+            <div className="flex justify-end space-x-4 pt-6">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="btn-secondary"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                className="btn-primary"
               >
                 Create Task
               </button>

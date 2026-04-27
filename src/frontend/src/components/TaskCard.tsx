@@ -18,40 +18,55 @@ export const TaskCard = ({ task, onEdit, onDelete, onUpdate }: { task: Task; onE
   };
 
   return (
-    <div className="border rounded-lg shadow-md p-4 mb-4 bg-white">
-      <h3 className="text-lg font-bold">{task.title}</h3>
-      {task.description && <p className="text-gray-700">{task.description}</p>}
-      <div className="flex flex-wrap gap-2 mt-2">
-        <StatusBadge status={task.status} type="status" />
-        <StatusBadge status={task.priority} type="priority" />
-        {task.dueDate && (
-          <span className="bg-gray-500 text-white px-2 py-1 rounded">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
-        )}
+    <div className="card-modern p-6 flex flex-col h-full">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="text-xl font-bold text-slate-800">{task.title}</h3>
+        <div className="flex gap-2">
+          <StatusBadge status={task.status} type="status" />
+          <StatusBadge status={task.priority} type="priority" />
+        </div>
       </div>
-      <div className="mt-3 flex gap-2">
+      
+      {task.description && (
+        <p className="text-slate-600 mb-4 flex-grow">{task.description}</p>
+      )}
+      
+      {task.dueDate && (
+        <div className="text-sm text-slate-500 mb-4 flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Due: {new Date(task.dueDate).toLocaleDateString()}
+        </div>
+      )}
+      
+      <div className="mt-auto pt-4 border-t border-slate-100 flex items-center gap-3">
         <select 
           value={task.status}
           onChange={(e) => handleStatusChange(task.id, e.target.value as TaskStatus)}
-          className="border rounded px-3 py-2 mr-2"
+          className="select-modern text-sm py-2"
         >
           <option value="TODO">To Do</option>
           <option value="IN_PROGRESS">In Progress</option>
           <option value="DONE">Done</option>
         </select>
-        <button 
-          onClick={() => onEdit(task)}
-          className="border border-blue-500 text-blue-500 px-4 py-2 rounded hover:bg-blue-50"
-        >
-          <PencilIcon className="h-5 w-5 text-blue-500" />
-          Edit
-        </button>
-        <button 
-          onClick={() => handleDelete(task.id)}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          <TrashIcon className="h-5 w-5" />
-          Delete
-        </button>
+        
+        <div className="flex gap-2 ml-auto">
+          <button 
+            onClick={() => onEdit(task)}
+            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+            title="Edit task"
+          >
+            <PencilIcon className="h-5 w-5" />
+          </button>
+          <button 
+            onClick={() => handleDelete(task.id)}
+            className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+            title="Delete task"
+          >
+            <TrashIcon className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </div>
   );

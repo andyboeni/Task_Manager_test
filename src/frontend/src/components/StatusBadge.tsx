@@ -9,17 +9,17 @@ export const StatusBadge = ({ status, type }: StatusBadgeProps) => {
   let className = '';
   if (type === 'status') {
     switch (status) {
-      case 'TODO': className = 'bg-gray-500 text-white'; break;
-      case 'IN_PROGRESS': className = 'bg-blue-500 text-white'; break;
-      case 'DONE': className = 'bg-green-500 text-white'; break;
+      case 'TODO': className = 'badge-status-TODO'; break;
+      case 'IN_PROGRESS': className = 'badge-status-IN_PROGRESS'; break;
+      case 'DONE': className = 'badge-status-DONE'; break;
     }
   } else {
     switch (status) {
-      case 'LOW': className = 'bg-green-500 text-white'; break;
-      case 'MEDIUM': className = 'bg-yellow-500 text-black'; break;
-      case 'HIGH': className = 'bg-red-500 text-white'; break;
-      case 'URGENT': className = 'bg-red-700 text-white'; break;
+      case 'LOW': className = 'badge-priority-LOW'; break;
+      case 'MEDIUM': className = 'badge-priority-MEDIUM'; break;
+      case 'HIGH': className = 'badge-priority-HIGH'; break;
+      case 'URGENT': className = 'badge-priority-URGENT'; break;
     }
   }
-  return <span className={`px-2 py-1 rounded ${className}`}>{status}</span>;
+  return <span className={`badge-modern ${className}`}>{status}</span>;
 };
