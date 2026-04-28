@@ -4,7 +4,7 @@ import { UpdateTask } from '../components/UpdateTask';
 import { TaskCard } from '../components/TaskCard';
 import { ErrorMessage } from '../components/ErrorMessage';
 import taskApi from '../api/taskApi';
-import { Task, TaskFormData, TaskStatus } from '../types/task';
+import { Task, TaskFormData } from '../types/task';
 
 export const TaskManagerPage = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -17,6 +17,7 @@ export const TaskManagerPage = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isBackendOffline, setIsBackendOffline] = useState(false);
 
   const loadTasks = async () => {
     try {
@@ -38,7 +39,23 @@ export const TaskManagerPage = () => {
   };
 
   useEffect(() => {
-    loadTasks();
+    const checkConnection = async () => {
+      const { connected } = await taskApi.checkConnection();
+      if (!connected) {
+        setIsBackendOffline(true);
+        setError('Backend server is offline. Please ensure the Spring Boot app is running on port 8080.');
+      } else {
+        setIsBackendOffline(false);
+        loadTasks();
+      }
+    };
+    checkConnection();
+  }, []);
+
+  useEffect(() => {
+    if (!isBackendOffline) {
+      loadTasks();
+    }
   }, [currentPage, itemsPerPage, sortBy, orderBy, searchTerm]);
 
   const handleCreateTask = async (data: TaskFormData) => {
@@ -50,8 +67,7 @@ export const TaskManagerPage = () => {
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to create task. Please try again.';
       setError(errorMessage);
-      console.error('Failed to create task:', err);
-      throw err; // Re-throw so AddTaskModal knows it failed
+      throw err;
     }
   };
 
@@ -64,7 +80,6 @@ export const TaskManagerPage = () => {
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to update task. Please try again.';
       setError(errorMessage);
-      console.error('Failed to update task:', err);
     }
   };
 
@@ -76,7 +91,6 @@ export const TaskManagerPage = () => {
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to delete task. Please try again.';
       setError(errorMessage);
-      console.error('Failed to delete task:', err);
     }
   };
 
@@ -88,40 +102,36 @@ export const TaskManagerPage = () => {
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to update task status. Please try again.';
       setError(errorMessage);
-      console.error('Failed to update task status:', err);
     }
   };
 
   return (
-    <div className="modern-layout min-h-screen">
-      <header className="modern-header flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Task Manager</h1>
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
+        <h1 className="text-xl font-bold text-slate-800">Task Manager</h1>
         <button 
-          onClick={() => {
-            console.log('Add Task button clicked');
-            setIsAddModalOpen(true);
-          }}
-          className="btn-primary flex items-center gap-2"
+          onClick={() => setIsAddModalOpen(true)}
+          className="btn-primary"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           Add Task
         </button>
       </header>
       
-      <main className="max-w-6xl mx-auto px-4 pb-12">
+      <main className="max-w-6xl mx-auto p-6">
         {error && <ErrorMessage message={error} />}
         
         {selectedTask ? (
-          <div className="modern-section p-8 mb-8 animate-in slide-in-from-top duration-300">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-slate-800">Edit Task</h2>
+          <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6 shadow-sm">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold text-slate-800">Edit Task</h2>
               <button 
                 onClick={() => setSelectedTask(null)}
-                className="text-slate-500 hover:text-slate-700 transition-colors"
+                className="text-slate-400 hover:text-slate-600 transition-colors"
               >
-                ✕ Cancel
+                ✕
               </button>
             </div>
             <UpdateTask 
@@ -131,13 +141,13 @@ export const TaskManagerPage = () => {
           </div>
         ) : null}
 
-        <div className="modern-section p-6">
-          <div className="flex flex-wrap items-end mb-8 gap-4">
-            <div className="flex-grow min-w-[300px]">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Search</label>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <div className="flex flex-wrap items-end gap-4 mb-6">
+            <div className="flex-grow min-w-[200px]">
+              <label className="block text-xs-bold mb-1">Search</label>
               <input
                 type="text"
-                placeholder="Search tasks by title or description..."
+                placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -146,8 +156,8 @@ export const TaskManagerPage = () => {
                 className="input-modern"
               />
             </div>
-            <div className="w-full md:w-48">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Sort by</label>
+            <div className="w-40">
+              <label className="block text-xs-bold mb-1">Sort</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -159,19 +169,19 @@ export const TaskManagerPage = () => {
                 <option value="priority">Priority</option>
               </select>
             </div>
-            <div className="w-full md:w-32">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Order</label>
+            <div className="w-32">
+              <label className="block text-xs-bold mb-1">Order</label>
               <select
                 value={orderBy}
                 onChange={(e) => setOrderBy(e.target.value as 'asc' | 'desc')}
                 className="select-modern"
               >
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
+                <option value="asc">Asc</option>
+                <option value="desc">Desc</option>
               </select>
             </div>
-            <div className="w-full md:w-32">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Per page</label>
+            <div className="w-24">
+              <label className="block text-xs-bold mb-1">Limit</label>
               <select
                 value={itemsPerPage}
                 onChange={(e) => {
@@ -188,18 +198,12 @@ export const TaskManagerPage = () => {
           </div>
 
           {tasks.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-slate-400 mb-4">
-                <svg className="w-16 h-16 mx-auto opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <p className="text-slate-500 text-lg">No tasks found</p>
-              <p className="text-slate-400 text-sm">Try adjusting your search or create a new task</p>
+            <div className="text-center py-12 text-slate-500">
+              {isBackendOffline ? 'Backend offline - cannot load tasks' : 'No tasks found'}
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {tasks.map(task => (
                   <TaskCard 
                     key={task.id}
@@ -211,21 +215,21 @@ export const TaskManagerPage = () => {
                 ))}
               </div>
               
-              <div className="flex justify-center items-center mt-8 gap-4">
+              <div className="flex justify-center items-center mt-6 gap-4">
                 <button 
                   onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                   disabled={currentPage === 0}
-                  className="modern-pagination px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                  className="btn-secondary disabled:opacity-50"
                 >
                   Previous
                 </button>
-                <span className="text-slate-600 font-medium">
+                <span className="text-sm text-slate-600">
                   Page {currentPage + 1} of {Math.ceil(totalItems / itemsPerPage)}
                 </span>
                 <button 
                   onClick={() => setCurrentPage(p => p + 1)}
                   disabled={(currentPage + 1) * itemsPerPage >= totalItems}
-                  className="modern-pagination px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
+                  className="btn-secondary disabled:opacity-50"
                 >
                   Next
                 </button>

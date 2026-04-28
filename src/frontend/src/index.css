@@ -1,167 +1,59 @@
-/* Modern Design System */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-slate-50 to-slate-100;
-    margin: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 
 @layer components {
-  /* Glassmorphism Card */
-  .glass-card {
-    @apply bg-white/80 backdrop-blur-lg border border-white/20 shadow-xl rounded-2xl;
-  }
-
-  /* Modern Button */
+  /* Buttons */
   .btn-primary {
-    @apply bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 transition-all duration-300;
+    @apply bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-r from-slate-700 to-slate-800 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-lg hover:scale-105 transition-all duration-300;
+    @apply bg-white text-slate-700 border border-slate-300 px-4 py-2 rounded-lg font-medium hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-danger {
-    @apply bg-gradient-to-r from-rose-500 to-red-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-rose-500/30 hover:shadow-rose-500/50 hover:scale-105 transition-all duration-300;
+    @apply bg-rose-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .btn-success {
-    @apply bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-105 transition-all duration-300;
-  }
-
-  /* Modern Input */
+  /* Inputs */
   .input-modern {
-    @apply bg-white/90 backdrop-blur border border-slate-200 rounded-xl px-4 py-3 w-full focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 placeholder:text-slate-400;
+    @apply border border-slate-300 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 text-sm;
   }
 
-  /* Modern Select */
   .select-modern {
-    @apply bg-white/90 backdrop-blur border border-slate-200 rounded-xl px-4 py-3 w-full focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 appearance-none cursor-pointer;
+    @apply border border-slate-300 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white text-sm cursor-pointer;
   }
 
-  /* Modern Badge */
-  .badge-modern {
-    @apply px-3 py-1.5 rounded-full font-medium text-sm shadow-md;
-  }
-
-  /* Modern Card */
+  /* Cards */
   .card-modern {
-    @apply bg-white/95 backdrop-blur border border-white/30 shadow-xl rounded-2xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300;
+    @apply bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden;
   }
 
-  /* Modern Layout */
-  .modern-layout {
-    @apply bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen;
+  /* Badges */
+  .badge-modern {
+    @apply px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider border;
   }
 
-  /* Modern Header */
-  .modern-header {
-    @apply bg-gradient-to-r from-indigo-600 to-purple-700 text-white px-6 py-8 shadow-2xl;
-  }
+  .badge-status-TODO { @apply bg-slate-100 text-slate-600 border-slate-200; }
+  .badge-status-IN_PROGRESS { @apply bg-blue-100 text-blue-700 border-blue-200; }
+  .badge-status-DONE { @apply bg-emerald-100 text-emerald-700 border-emerald-200; }
 
-  /* Modern Section */
-  .modern-section {
-    @apply bg-white/70 backdrop-blur border border-white/30 rounded-2xl shadow-xl;
-  }
-
-  /* Modern Pagination */
-  .modern-pagination {
-    @apply bg-white/90 backdrop-blur border border-slate-200 rounded-xl px-4 py-2;
-  }
-
-  /* Modern Modal */
-  .modern-modal {
-    @apply bg-white/95 backdrop-blur-lg border border-white/30 shadow-2xl rounded-2xl;
-  }
-
-  /* Modern Input Focus Animation */
-  .input-animated {
-    @apply transition-all duration-300;
-  }
-
-  /* Modern Spinner */
-  .modern-spinner {
-    @apply w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin;
-  }
-
-  /* Modern Badge */
-  .badge-status-TODO {
-    @apply bg-gradient-to-r from-slate-400 to-slate-500 text-white;
-  }
-
-  .badge-status-IN_PROGRESS {
-    @apply bg-gradient-to-r from-blue-500 to-cyan-500 text-white;
-  }
-
-  .badge-status-DONE {
-    @apply bg-gradient-to-r from-emerald-500 to-teal-500 text-white;
-  }
-
-  .badge-priority-LOW {
-    @apply bg-gradient-to-r from-emerald-500 to-green-500 text-white;
-  }
-
-  .badge-priority-MEDIUM {
-    @apply bg-gradient-to-r from-amber-500 to-yellow-500 text-black;
-  }
-
-  .badge-priority-HIGH {
-    @apply bg-gradient-to-r from-orange-500 to-red-500 text-white;
-  }
-
-  .badge-priority-URGENT {
-    @apply bg-gradient-to-r from-red-600 to-red-800 text-white;
-  }
+  .badge-priority-LOW { @apply bg-slate-100 text-slate-600 border-slate-200; }
+  .badge-priority-MEDIUM { @apply bg-yellow-100 text-yellow-700 border-yellow-200; }
+  .badge-priority-HIGH { @apply bg-orange-100 text-orange-700 border-orange-200; }
+  .badge-priority-URGENT { @apply bg-rose-100 text-rose-700 border-rose-200; }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent;
-  }
-
-  .text-gradient-lg {
-    @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
-  }
-
-  .glass-effect {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20;
-  }
-
-  .shadow-glow {
-    @apply shadow-indigo-500/50 shadow-lg;
-  }
-
-  .shadow-glow-lg {
-    @apply shadow-purple-500/50 shadow-xl;
-  }
-
-  .hover-lift {
-    @apply hover:-translate-y-1 hover:shadow-xl transition-all duration-300;
-  }
-
-  .gradient-border {
-    @apply relative bg-white rounded-2xl p-[2px] hover-lift;
-  }
-
-  .gradient-border::before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300;
-  }
-
-  .gradient-border::after {
-    content: '';
-    @apply absolute inset-0 bg-white rounded-2xl;
+  .text-xs-bold {
+    @apply text-xs font-bold text-slate-500 uppercase tracking-wider;
   }
 }
