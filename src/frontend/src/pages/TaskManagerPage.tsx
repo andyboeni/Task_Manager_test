@@ -47,9 +47,11 @@ export const TaskManagerPage = () => {
       await taskApi.createTask(data);
       await loadTasks();
       setIsAddModalOpen(false);
-    } catch (err) {
-      setError('Failed to create task. Please try again.');
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Failed to create task. Please try again.';
+      setError(errorMessage);
       console.error('Failed to create task:', err);
+      throw err; // Re-throw so AddTaskModal knows it failed
     }
   };
 
@@ -59,8 +61,9 @@ export const TaskManagerPage = () => {
       await taskApi.updateTask(id, data);
       await loadTasks();
       setSelectedTask(null);
-    } catch (err) {
-      setError('Failed to update task. Please try again.');
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Failed to update task. Please try again.';
+      setError(errorMessage);
       console.error('Failed to update task:', err);
     }
   };
@@ -70,8 +73,9 @@ export const TaskManagerPage = () => {
       setError(null);
       await taskApi.deleteTask(id);
       await loadTasks();
-    } catch (err) {
-      setError('Failed to delete task. Please try again.');
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Failed to delete task. Please try again.';
+      setError(errorMessage);
       console.error('Failed to delete task:', err);
     }
   };
@@ -81,8 +85,9 @@ export const TaskManagerPage = () => {
       setError(null);
       await taskApi.updateTask(id, data as TaskFormData);
       await loadTasks();
-    } catch (err) {
-      setError('Failed to update task status. Please try again.');
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Failed to update task status. Please try again.';
+      setError(errorMessage);
       console.error('Failed to update task status:', err);
     }
   };

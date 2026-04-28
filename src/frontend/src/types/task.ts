@@ -11,4 +11,4 @@ export interface Task {
   assignee?: string;
 }
 
-export type TaskFormData = Task;
+export type TaskFormData = Omit<Task, 'id'>;
