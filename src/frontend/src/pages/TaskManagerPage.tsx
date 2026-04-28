@@ -97,7 +97,10 @@ export const TaskManagerPage = () => {
       <header className="modern-header flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Task Manager</h1>
         <button 
-          onClick={() => setIsAddModalOpen(true)}
+          onClick={() => {
+            console.log('Add Task button clicked');
+            setIsAddModalOpen(true);
+          }}
           className="btn-primary flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
