@@ -1,3 +1,4 @@
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
 import { TaskFormData } from '../types/task';
 
@@ -37,7 +38,7 @@ export const AddTaskModal = ({ isOpen, onClose, onSubmit }: AddTaskModalProps) =
               onClick={onClose}
               className="text-slate-400 hover:text-slate-600 transition-colors"
             >
-              ✕
+              <XMarkIcon className="h-5 w-5" />
             </button>
           </div>
           
