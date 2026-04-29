@@ -5,6 +5,7 @@ import { TaskCard } from '../components/TaskCard';
 import { ErrorMessage } from '../components/ErrorMessage';
 import taskApi from '../api/taskApi';
 import { Task, TaskFormData } from '../types/task';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export const TaskManagerPage = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -113,9 +114,7 @@ export const TaskManagerPage = () => {
           onClick={() => setIsAddModalOpen(true)}
           className="btn-primary"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
+            <PlusIcon className="h-4 w-4" />
           Add Task
         </button>
       </header>
@@ -131,7 +130,7 @@ export const TaskManagerPage = () => {
                 onClick={() => setSelectedTask(null)}
                 className="text-slate-400 hover:text-slate-600 transition-colors"
               >
-                ✕
+                <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
             <UpdateTask 
