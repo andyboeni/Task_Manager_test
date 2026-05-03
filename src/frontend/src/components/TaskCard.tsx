@@ -33,7 +33,6 @@ export const TaskCard = ({ task, onEdit, onDelete, onUpdate }: { task: Task; onE
       
       {task.dueDate && (
         <div className="text-xs text-slate-500 mb-3 flex items-center gap-1.5">
-<CalendarIcon className="h-4 w-4" />
            Due: {new Date(task.dueDate).toLocaleDateString()}
          </div>
       )}
