@@ -14,6 +14,7 @@ export const AddTask = ({ onSubmit }: AddTaskProps) => {
         defaultValues: {
             status: 'TODO' as TaskStatus,
             priority: 'MEDIUM' as TaskPriority,
+            assignee: '',
         }
     });
 
@@ -90,6 +91,25 @@ export const AddTask = ({ onSubmit }: AddTaskProps) => {
                 </select>
                 {errors.priority && (
                     <p className="text-red-500 text-sm mt-1">{errors.priority.message}</p>
+                )}
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium mb-1">Assignee</label>
+                <input
+                    {...register('assignee', {
+                        maxLength: {
+                            value: 100,
+                            message: 'Assignee name must be at most 100 characters'
+                        }
+                    })}
+                    className="w-full p-2 border rounded-md"
+                    placeholder="Enter assignee name"
+                />
+                {errors.assignee?.message && (
+                    <p className="text-red-500 text-sm mt-1">
+                        {errors.assignee.message}
+                    </p>
                 )}
             </div>
 
