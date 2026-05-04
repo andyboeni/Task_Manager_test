@@ -34,6 +34,10 @@ public class Task {
     @Column(nullable = false, updatable = true)
     private TaskPriority priority = TaskPriority.MEDIUM;
 
+    @Size(max = 100)
+    @Column(length = 100)
+    private String assignee;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
@@ -41,12 +45,13 @@ public class Task {
     public Task() {}
 
     // Constructor for testing
-    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, LocalDate dueDate) {
+    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, String assignee, LocalDate dueDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
         this.priority = priority;
+        this.assignee = assignee;
         this.dueDate = dueDate;
     }
 
@@ -61,6 +66,8 @@ public class Task {
     public void setStatus(TaskStatus status) { this.status = status; }
     public TaskPriority getPriority() { return priority; }
     public void setPriority(TaskPriority priority) { this.priority = priority; }
+    public String getAssignee() { return assignee; }
+    public void setAssignee(String assignee) { this.assignee = assignee; }
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
@@ -72,6 +79,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", priority=" + priority +
+                ", assignee='" + assignee + '\'' +
                 ", dueDate=" + dueDate +
                 '}';
     }

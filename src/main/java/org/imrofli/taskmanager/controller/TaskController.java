@@ -20,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tasks")
+@Validated
 public class TaskController {
 
     private final TaskService taskService;
@@ -49,14 +50,7 @@ public class TaskController {
         
         return ResponseEntity.ok(new org.imrofli.taskmanager.dto.PaginatedResponse(
             tasks.stream()
-                .map(task -> new TaskResponse(
-                    task.getId(),
-                    task.getTitle(),
-                    task.getDescription(),
-                    task.getStatus(),
-                    task.getPriority(),
-                    task.getDueDate()
-                ))
+                .map(this::toTaskResponse)
                 .toList(),
             totalItems
         ));
@@ -69,6 +63,7 @@ public class TaskController {
             task.getDescription(),
             task.getStatus(),
             task.getPriority(),
+            task.getAssignee(),
             task.getDueDate()
         );
     }
@@ -83,11 +78,13 @@ public class TaskController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
+    public ResponseEntity<TaskResponse> createTask(@Validated(OnCreate.class) @RequestBody TaskRequest request) {
         Task task = new Task();
         task.setTitle(request.title());
         task.setDescription(request.description());
         task.setStatus(request.status());
+        task.setPriority(request.priority());
+        task.setAssignee(request.assignee());
         task.setDueDate(request.dueDate());
 
         Task createdTask = taskService.createTask(task);
@@ -98,11 +95,13 @@ public class TaskController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest request) {
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Validated(OnUpdate.class) @RequestBody TaskRequest request) {
         Task existingTask = taskService.getTaskById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
         existingTask.setTitle(request.title());
         existingTask.setDescription(request.description());
         existingTask.setStatus(request.status());
+        existingTask.setPriority(request.priority());
+        existingTask.setAssignee(request.assignee());
         existingTask.setDueDate(request.dueDate());
         Task updatedTask = taskService.updateTask(existingTask);
         return ResponseEntity.ok(toTaskResponse(updatedTask));
@@ -125,6 +124,12 @@ public class TaskController {
         }
         if (request.status() != null) {
             existingTask.setStatus(request.status());
+        }
+        if (request.priority() != null) {
+            existingTask.setPriority(request.priority());
+        }
+        if (request.assignee() != null) {
+            existingTask.setAssignee(request.assignee());
         }
         if (request.dueDate() != null) {
             existingTask.setDueDate(request.dueDate());

@@ -11,7 +11,8 @@ import java.time.LocalDate;
 public record TaskRequest(
     @NotBlank(groups = OnCreate.class) @Size(max = 100, groups = {OnCreate.class, OnUpdate.class}) String title,
     @Size(max = 500, groups = {OnCreate.class, OnUpdate.class}) String description,
-    @NotBlank(groups = OnCreate.class) TaskStatus status,
+    @NotNull(groups = OnCreate.class) TaskStatus status,
     @NotNull TaskPriority priority,
+    @Size(max = 100, groups = {OnCreate.class, OnUpdate.class}) String assignee,
     LocalDate dueDate
 ) {}

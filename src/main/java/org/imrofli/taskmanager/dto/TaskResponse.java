@@ -11,5 +11,6 @@ public record TaskResponse(
     String description,
     TaskStatus status,
     TaskPriority priority,
+    String assignee,
     LocalDate dueDate
 ) {}
