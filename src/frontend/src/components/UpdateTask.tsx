@@ -17,6 +17,7 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
       description: task.description,
       status: task.status,
       priority: task.priority,
+      assignee: task.assignee,
     }
   });
 
@@ -55,6 +56,23 @@ export const UpdateTask = ({ task, onSubmit }: UpdateTaskProps) => {
         />
         {errors.description && (
           <p className="text-xs text-rose-500 mt-1">{errors.description.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-xs-bold mb-1">Assignee</label>
+        <input
+          {...register('assignee', {
+            maxLength: {
+              value: 100,
+              message: 'Assignee name must be at most 100 characters'
+            }
+          })}
+          className={`input-modern ${errors.assignee ? 'border-rose-500' : ''}`}
+          placeholder="Enter assignee name"
+        />
+        {errors.assignee && (
+          <p className="text-xs text-rose-500 mt-1">{errors.assignee.message}</p>
         )}
       </div>
 

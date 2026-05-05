@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, CalendarIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Task, TaskStatus } from '../types/task';
 import { StatusBadge } from './StatusBadge';
 
@@ -31,11 +31,21 @@ export const TaskCard = ({ task, onEdit, onDelete, onUpdate }: { task: Task; onE
         <p className="text-sm text-slate-600 mb-3 line-clamp-2 flex-grow">{task.description}</p>
       )}
       
-      {task.dueDate && (
-        <div className="text-xs text-slate-500 mb-3 flex items-center gap-1.5">
-           Due: {new Date(task.dueDate).toLocaleDateString()}
-         </div>
-      )}
+      <div className="flex flex-wrap gap-x-4 gap-y-2 mb-3">
+        {task.dueDate && (
+          <div className="text-xs text-slate-500 flex items-center gap-1.5">
+            <CalendarIcon className="h-3.5 w-3.5" />
+            Due: {new Date(task.dueDate).toLocaleDateString()}
+          </div>
+        )}
+        
+        {task.assignee && (
+          <div className="text-xs text-slate-500 flex items-center gap-1.5">
+            <UserIcon className="h-3.5 w-3.5" />
+            {task.assignee}
+          </div>
+        )}
+      </div>
       
       <div className="mt-auto pt-3 border-t border-slate-100 flex items-center gap-2">
         <select 
