@@ -7,6 +7,8 @@ interface StatusBadgeProps {
 
 export const StatusBadge = ({ status, type }: StatusBadgeProps) => {
   let className = '';
+  let label = status.replace('_', ' ');
+  
   if (type === 'status') {
     switch (status) {
       case 'TODO': className = 'badge-status-TODO'; break;
@@ -21,5 +23,5 @@ export const StatusBadge = ({ status, type }: StatusBadgeProps) => {
       case 'URGENT': className = 'badge-priority-URGENT'; break;
     }
   }
-  return <span className={`badge-modern ${className}`}>{status}</span>;
+  return <span className={`badge-modern ${className}`}>{label}</span>;
 };

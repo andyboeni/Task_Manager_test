@@ -5,7 +5,7 @@ import { TaskCard } from '../components/TaskCard';
 import { ErrorMessage } from '../components/ErrorMessage';
 import taskApi from '../api/taskApi';
 import { Task, TaskFormData } from '../types/task';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Plus, X } from 'lucide-react';
 
 export const TaskManagerPage = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -107,30 +107,35 @@ export const TaskManagerPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
-        <h1 className="text-xl font-bold text-slate-800">Task Manager</h1>
+    <div className="min-h-screen bg-slate-50/50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-20">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-indigo-200 shadow-lg">
+            <Plus className="h-6 w-6 text-white rotate-45 shrink-0" />
+          </div>
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight">TaskFlow</h1>
+        </div>
         <button 
           onClick={() => setIsAddModalOpen(true)}
-          className="btn-primary"
+          className="btn-primary shadow-indigo-100 shadow-xl"
         >
-            <PlusIcon className="h-4 w-4" />
-          Add Task
+          <Plus className="h-5 w-5 shrink-0" />
+          <span className="hidden sm:inline">New Task</span>
         </button>
       </header>
       
-      <main className="max-w-6xl mx-auto p-6">
+      <main className="max-w-7xl mx-auto p-6 md:p-8">
         {error && <ErrorMessage message={error} />}
         
         {selectedTask ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6 shadow-sm">
-            <div className="flex justify-between items-center mb-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-8 shadow-sm animate-in slide-in-from-top-4 duration-300">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-bold text-slate-800">Edit Task</h2>
               <button 
                 onClick={() => setSelectedTask(null)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all"
               >
-                <XMarkIcon className="h-5 w-5" />
+                <X className="h-5 w-5 shrink-0" />
               </button>
             </div>
             <UpdateTask 
@@ -140,69 +145,80 @@ export const TaskManagerPage = () => {
           </div>
         ) : null}
 
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-          <div className="flex flex-wrap items-end gap-4 mb-6">
-            <div className="flex-grow min-w-[200px]">
-              <label className="block text-xs-bold mb-1">Search</label>
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(0);
-                }}
-                className="input-modern"
-              />
+        <div className="mb-8">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div className="flex flex-wrap items-center gap-4 flex-grow">
+              <div className="relative flex-grow max-w-md">
+                <input
+                  type="text"
+                  placeholder="Search tasks..."
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(0);
+                  }}
+                  className="input-modern pl-4 h-11"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="select-modern h-11 !w-32"
+                >
+                  <option value="id">Sort by ID</option>
+                  <option value="title">Sort by Title</option>
+                  <option value="status">Sort by Status</option>
+                  <option value="priority">Sort by Priority</option>
+                </select>
+                <select
+                  value={orderBy}
+                  onChange={(e) => setOrderBy(e.target.value as 'asc' | 'desc')}
+                  className="select-modern h-11 !w-24"
+                >
+                  <option value="asc">Asc</option>
+                  <option value="desc">Desc</option>
+                </select>
+              </div>
             </div>
-            <div className="w-40">
-              <label className="block text-xs-bold mb-1">Sort</label>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="select-modern"
-              >
-                <option value="id">ID</option>
-                <option value="title">Title</option>
-                <option value="status">Status</option>
-                <option value="priority">Priority</option>
-              </select>
-            </div>
-            <div className="w-32">
-              <label className="block text-xs-bold mb-1">Order</label>
-              <select
-                value={orderBy}
-                onChange={(e) => setOrderBy(e.target.value as 'asc' | 'desc')}
-                className="select-modern"
-              >
-                <option value="asc">Asc</option>
-                <option value="desc">Desc</option>
-              </select>
-            </div>
-            <div className="w-24">
-              <label className="block text-xs-bold mb-1">Limit</label>
-              <select
-                value={itemsPerPage}
-                onChange={(e) => {
-                  setItemsPerPage(Number(e.target.value));
-                  setCurrentPage(0);
-                }}
-                className="select-modern"
-              >
-                {[5, 10, 20, 50].map((size) => (
-                  <option key={size} value={size}>{size}</option>
-                ))}
-              </select>
+            
+            <div className="flex items-center gap-2 bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+              {[5, 10, 20].map((size) => (
+                <button
+                  key={size}
+                  onClick={() => {
+                    setItemsPerPage(size);
+                    setCurrentPage(0);
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    itemsPerPage === size 
+                    ? 'bg-indigo-600 text-white shadow-indigo-100 shadow-lg' 
+                    : 'text-slate-500 hover:bg-slate-50'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
             </div>
           </div>
 
           {tasks.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
-              {isBackendOffline ? 'Backend offline - cannot load tasks' : 'No tasks found'}
+            <div className="bg-white border border-dashed border-slate-300 rounded-3xl py-20 text-center">
+              <div className="mx-auto w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-6">
+                <Plus className="h-10 w-10 text-slate-300 shrink-0" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-800 mb-1">
+                {isBackendOffline ? 'Backend is offline' : 'No tasks found'}
+              </h3>
+              <p className="text-slate-500 max-w-xs mx-auto text-sm leading-relaxed">
+                {isBackendOffline 
+                  ? 'Please ensure the Spring Boot application is running on port 8080.' 
+                  : 'Try adjusting your search or filters, or create a new task to get started.'}
+              </p>
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tasks.map(task => (
                   <TaskCard 
                     key={task.id}
@@ -214,24 +230,29 @@ export const TaskManagerPage = () => {
                 ))}
               </div>
               
-              <div className="flex justify-center items-center mt-6 gap-4">
-                <button 
-                  onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
-                  disabled={currentPage === 0}
-                  className="btn-secondary disabled:opacity-50"
-                >
-                  Previous
-                </button>
-                <span className="text-sm text-slate-600">
-                  Page {currentPage + 1} of {Math.ceil(totalItems / itemsPerPage)}
-                </span>
-                <button 
-                  onClick={() => setCurrentPage(p => p + 1)}
-                  disabled={(currentPage + 1) * itemsPerPage >= totalItems}
-                  className="btn-secondary disabled:opacity-50"
-                >
-                  Next
-                </button>
+              <div className="flex justify-between items-center mt-10">
+                <p className="text-sm text-slate-500 font-medium">
+                  Showing <span className="text-slate-800">{tasks.length}</span> of <span className="text-slate-800">{totalItems}</span> tasks
+                </p>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                    disabled={currentPage === 0}
+                    className="btn-secondary h-10 w-10 !p-0 disabled:opacity-30"
+                  >
+                    ←
+                  </button>
+                  <div className="flex items-center px-4 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700">
+                    Page {currentPage + 1}
+                  </div>
+                  <button 
+                    onClick={() => setCurrentPage(p => p + 1)}
+                    disabled={(currentPage + 1) * itemsPerPage >= totalItems}
+                    className="btn-secondary h-10 w-10 !p-0 disabled:opacity-30"
+                  >
+                    →
+                  </button>
+                </div>
               </div>
             </>
           )}

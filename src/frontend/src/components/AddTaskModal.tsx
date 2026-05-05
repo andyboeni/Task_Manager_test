@@ -1,4 +1,4 @@
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { TaskFormData } from '../types/task';
 
@@ -29,38 +29,40 @@ export const AddTaskModal = ({ isOpen, onClose, onSubmit }: AddTaskModalProps) =
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white w-full max-w-lg rounded-xl shadow-2xl animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-300 overflow-hidden">
+        <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+          <h3 className="text-lg font-bold text-slate-800">Create New Task</h3>
+          <button 
+            onClick={onClose}
+            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full transition-all"
+          >
+            <X className="h-5 w-5 shrink-0" />
+          </button>
+        </div>
+        
         <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold text-slate-800">Create Task</h3>
-            <button 
-              onClick={onClose}
-              className="text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              <XMarkIcon className="h-5 w-5" />
-            </button>
-          </div>
-          
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
             <div>
-              <label className="block text-xs-bold mb-1">Title *</label>
+              <label className="block text-xs-bold mb-1.5">Task Title *</label>
               <input
                 type="text"
-                placeholder="Enter task title..."
+                placeholder="e.g. Design system update"
                 {...register('title', { required: true, maxLength: 100 })}
-                className={`input-modern ${errors.title ? 'border-rose-500' : ''}`}
+                className={`input-modern h-11 ${errors.title ? 'border-rose-500 ring-rose-500/10 focus:ring-rose-500/20 focus:border-rose-500' : ''}`}
               />
               {errors.title && (
-                <p className="mt-1 text-xs text-rose-500">Title required</p>
+                <p className="mt-1.5 text-xs font-semibold text-rose-500 flex items-center gap-1">
+                  <span className="shrink-0">⚠</span> Title is required (max 100 chars)
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs-bold mb-1">Description</label>
+              <label className="block text-xs-bold mb-1.5">Description</label>
               <textarea
-                rows={2}
-                placeholder="Add more details..."
+                rows={3}
+                placeholder="Briefly describe the task goals..."
                 {...register('description', { maxLength: 500 })}
                 className={`input-modern resize-none ${errors.description ? 'border-rose-500' : ''}`}
               />
@@ -68,45 +70,39 @@ export const AddTaskModal = ({ isOpen, onClose, onSubmit }: AddTaskModalProps) =
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs-bold mb-1">Status *</label>
+                <label className="block text-xs-bold mb-1.5">Status *</label>
                 <select
                   {...register('status', { required: true })}
-                  className={`select-modern ${errors.status ? 'border-rose-500' : ''}`}
+                  className={`select-modern h-11 ${errors.status ? 'border-rose-500' : ''}`}
                 >
-                  <option value="">Select</option>
-                  <option value="TODO">TODO</option>
-                  <option value="IN_PROGRESS">IN_PROGRESS</option>
-                  <option value="DONE">DONE</option>
+                  <option value="">Select Status</option>
+                  <option value="TODO">To Do</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="DONE">Done</option>
                 </select>
-                {errors.status && (
-                  <p className="mt-1 text-xs text-rose-500">Status required</p>
-                )}
               </div>
 
               <div>
-                <label className="block text-xs-bold mb-1">Priority *</label>
+                <label className="block text-xs-bold mb-1.5">Priority *</label>
                 <select
                   {...register('priority', { required: true })}
-                  className={`select-modern ${errors.priority ? 'border-rose-500' : ''}`}
+                  className={`select-modern h-11 ${errors.priority ? 'border-rose-500' : ''}`}
                 >
-                  <option value="">Select</option>
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="URGENT">URGENT</option>
+                  <option value="">Select Priority</option>
+                  <option value="LOW">Low</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="HIGH">High</option>
+                  <option value="URGENT">Urgent</option>
                 </select>
-                {errors.priority && (
-                  <p className="mt-1 text-xs text-rose-500">Priority required</p>
-                )}
               </div>
             </div>
 
             <div>
-              <label className="block text-xs-bold mb-1">Due Date</label>
+              <label className="block text-xs-bold mb-1.5">Due Date</label>
               <input
                 type="date"
                 {...register('dueDate')}
-                className="input-modern"
+                className="input-modern h-11"
               />
             </div>
 
@@ -115,16 +111,21 @@ export const AddTaskModal = ({ isOpen, onClose, onSubmit }: AddTaskModalProps) =
                 type="button"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="btn-secondary"
+                className="btn-secondary px-6"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary"
+                className="btn-primary px-8"
               >
-                {isSubmitting ? 'Creating...' : 'Create Task'}
+                {isSubmitting ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Creating...</span>
+                  </div>
+                ) : 'Create Task'}
               </button>
             </div>
           </form>

@@ -67,9 +67,9 @@ export const ProgressIndicator = ({ currentStatus, setCurrentStatus, taskId, isS
 
             <div className="text-sm opacity-50">
               {progress[status.value] > 0 && currentStatus === status.value ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
               ) : progress[status.value] > 0 ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
               ) : null}
             </div>
           </framerMotion.button>
