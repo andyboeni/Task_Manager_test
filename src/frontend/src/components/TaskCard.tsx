@@ -34,14 +34,12 @@ export const TaskCard = ({ task, onEdit, onDelete, onUpdate }: { task: Task; onE
       <div className="flex flex-wrap gap-x-4 gap-y-2 mb-3">
         {task.dueDate && (
           <div className="text-xs text-slate-500 flex items-center gap-1.5">
-            <CalendarIcon className="h-3.5 w-3.5" />
             Due: {new Date(task.dueDate).toLocaleDateString()}
           </div>
         )}
         
         {task.assignee && (
           <div className="text-xs text-slate-500 flex items-center gap-1.5">
-            <UserIcon className="h-3.5 w-3.5" />
             {task.assignee}
           </div>
         )}

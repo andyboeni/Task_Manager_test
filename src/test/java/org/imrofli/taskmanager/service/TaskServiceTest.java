@@ -5,6 +5,9 @@ import org.imrofli.taskmanager.entity.TaskPriority;
 import org.imrofli.taskmanager.entity.TaskStatus;
 import org.imrofli.taskmanager.exception.TaskNotFoundException;
 import org.imrofli.taskmanager.repository.TaskRepository;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +34,8 @@ class TaskServiceTest {
     @Mock
     private TaskRepository taskRepository;
 
+    private Validator validator;
+
     @InjectMocks
     private TaskServiceImpl taskService;
 
@@ -37,6 +43,11 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+        // Manual injection because we want a real validator for some tests
+        taskService = new TaskServiceImpl(taskRepository, validator);
+        
         sampleTask = new Task(1L, "Test Task", "Description", TaskStatus.TODO, TaskPriority.MEDIUM, "John Doe", LocalDate.now());
     }
 
@@ -129,7 +140,7 @@ class TaskServiceTest {
 
     @Test
     void getTasksWithPagination_withoutSearch_shouldReturnAll() {
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
         when(taskRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(sampleTask)));
         
         List<Task> result = taskService.getTasksWithPagination(0, 10, null, "id", "ASC");
@@ -140,9 +151,9 @@ class TaskServiceTest {
 
     @Test
     void getTasksWithPagination_withSearch_shouldCallSearchMethod() {
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
         when(taskRepository.findByTitleContainingOrDescriptionContaining(
-            eq("test"), eq("test"), any(Pageable.class)
+            eq("test"), eq("test"), eq(pageable)
         )).thenReturn(List.of(sampleTask));
         
         List<Task> result = taskService.getTasksWithPagination(0, 10, "Test", "id", "ASC");

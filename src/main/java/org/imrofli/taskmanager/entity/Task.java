@@ -1,6 +1,8 @@
 package org.imrofli.taskmanager.entity;
 
 import jakarta.persistence.*;
+import org.imrofli.taskmanager.dto.OnCreate;
+import org.imrofli.taskmanager.dto.OnUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,12 +19,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{validation.title.not_blank}")
-    @Size(max = 100, message = "{validation.title.max_length}")
+    @NotBlank(message = "{validation.title.not_blank}", groups = {OnCreate.class, OnUpdate.class})
+    @Size(max = 100, message = "{validation.title.max_length}", groups = {OnCreate.class, OnUpdate.class})
     @Column(nullable = false, updatable = true, columnDefinition = "VARCHAR(100)")
     private String title;
 
-    @Size(max = 500, message = "{validation.description.max_length}")
+    @Size(max = 500, message = "{validation.description.max_length}", groups = {OnCreate.class, OnUpdate.class})
     @Column(columnDefinition = "TEXT")
     private String description;
 

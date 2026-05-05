@@ -28,10 +28,9 @@ public class TaskServiceImpl implements TaskService {
     private final Validator validator;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, Validator validator) {
         this.taskRepository = taskRepository;
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
+        this.validator = validator;
     }
 
     @Override
